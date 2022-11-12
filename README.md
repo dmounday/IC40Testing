@@ -213,7 +213,7 @@ This works on my IC40 built in 2013. May not work on later models????
 
 Response:
 Byte 3: Sanitizer setting response 0x16.
-Byte 4: 0x4b ??
+Byte 4: 0x4b Temperture F.
 Byte 5: Sanitizer level % 0x00..0x64
 Byte 6: 0x03 ??
 Byte 7: 0x00 ?? 

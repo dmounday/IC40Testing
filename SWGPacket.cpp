@@ -121,9 +121,8 @@ std::string SWGPacket::PacketJSON()
   else if (MsgID() == GET_SANITIZER_RESP)
   {
     pt::ptree resp;
-    resp.add("status", ByteToHex(data_[2]));
+    resp.add("Temperture", data_[2]);
     resp.add("percent", data_[3]);
-    resp.add("byte2", ByteToHex(data_[2]));
     resp.add("byte6", ByteToHex(data_[4]));
     resp.add("byte7", ByteToHex(data_[5]));
     tree.push_back(std::make_pair("Sanitizer", resp));
