@@ -75,7 +75,7 @@ bool SerialIO::WriteBuf(const uint8_t *buf, size_t bufsz, std::chrono::milliseco
                   return;
                 }
                 writeOK = xfered == bufsz;
-                // std::cout << "async_write lambda: " << bufsz << std::endl;
+                // std::cout << "async_write lambda: " << bufsz << '\n';
                 timer_.cancel();
               });
   timer_.async_wait(

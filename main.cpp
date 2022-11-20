@@ -16,13 +16,12 @@ bool WriteRequestBytes(su::SerialIO &sio, pc::SWGCmd &req) {
     std::cout << "IC40 Command Packet: ";
     for (auto b : req.SWGRequest())
       std::cout << std::hex << static_cast<int>(b) << " ";
-    std::cout << std::endl
-              << std::flush;
+    std::cout << '\n';
   }
   size_t lth = req.SWGRequest().size();
   if (sio.WriteBuf(req.SWGRequest().data(), lth, std::chrono::milliseconds(500)))
     return true;
-  std::cout << "Write request failed or timedout" << std::endl;
+  std::cout << "Write request failed or timedout\n";
   return false;
 }
 
@@ -32,7 +31,7 @@ void DumpPacket(pc::SWGPacket &packet) {
   for (auto i = 0; i < p.size(); ++i) {
     std::cout << std::hex << static_cast<int>(p[i]) << " " << std::flush;
   }
-  std::cout << std::endl;
+  std::cout << "\n";
 }
 bool GetResponsePacket(su::SerialIO &sio, pc::SWGPacket &packet) {
   int timeout{0};
@@ -57,7 +56,7 @@ bool GetResponsePacket(su::SerialIO &sio, pc::SWGPacket &packet) {
     } else
       timeout++;
   }
-  std::cout << "Waiting Response timeout" << std::endl;
+  std::cout << "Waiting Response timeout\n" << std::flush;
   return false;
 }
 
@@ -102,8 +101,7 @@ std::string SetIC40Sanitizer(su::SerialIO &sio, uint8_t level) {
 }
 
 void usage() {
-  std::cerr << "Use: SerialUtils <device-path> {status|info|sanitizer <0..100>|percent} [-v]"
-            << std::endl;
+  std::cerr << "Use: SerialUtils <device-path> {status|info|sanitizer <0..100>|percent} [-v]\n";
 }
 
 int main(int argc, char **argv) {
@@ -116,7 +114,7 @@ int main(int argc, char **argv) {
   device = argv[1];
   verbose = strcmp(argv[argc - 1], "-v") == 0;
   if ( verbose )
-    std::cout << "All numerics are hexidecimal" << std::endl;
+    std::cout << "All numerics are hexidecimal\n";
   tree.put("Device.name", std::string(device));
   tree.put("Device.baud", 9600);
   tree.put("Device.bits", 8);
@@ -126,30 +124,29 @@ int main(int argc, char **argv) {
   pt::ptree node = tree.get_child("Device");
 
   // write_json("/dev/stdout", tree);
-  // std::cout << "Device: " << node.get<std::string>("name") << std::endl;
+  // std::cout << "Device: " << node.get<std::string>("name") << '\n';
   try {
     su::SerialIO sio(tree.get_child("Device"));  // construct, open and config.
     if (strcmp(argv[2], "status") == 0)
-      std::cout << GetIC40Status(sio) << std::endl;
+      std::cout << GetIC40Status(sio) << '\n';
     else if (strcmp(argv[2], "info") == 0) {
-      std::cout << GetIC40Info(sio) << std::endl;
+      std::cout << GetIC40Info(sio) << '\n';
     } else if (strcmp(argv[2], "sanitizer") == 0) {
       if (argc > 3 && isdigit(*argv[3]))
-        std::cout << SetIC40Sanitizer(sio, atoi(argv[3])) << std::endl;
+        std::cout << SetIC40Sanitizer(sio, atoi(argv[3])) << '\n';
       else {
-        std::cout << "No level percent specificed." << std::endl;
+        std::cout << "No level percent specificed.\n";
         usage();
         exit(-1);
       }
     } else if (strcmp(argv[2], "percent") == 0) {
-      std::cout << GetSanitizerLevel(sio) << std::endl;
+      std::cout << GetSanitizerLevel(sio) << '\n';
     } else {
-      std::cout << "No request specified," << std::endl;
+      std::cout << "No request specified.\n";
       usage();
     }
   } catch (boost::system::system_error &ec) {
-    std::cerr << "Device port open/config error: " << ec.what() << std::endl;
+    std::cerr << "Device port open/config error: " << ec.what() << '\n';
   }
-  std::cout << "Program exit" << std::endl
-            << std::flush;
+  std::cout << "Program exit\n";
 }
